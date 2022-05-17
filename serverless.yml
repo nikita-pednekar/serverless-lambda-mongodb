@@ -1,0 +1,55 @@
+service: serverless-lambda-mongodb
+
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  environment:
+      MONGODB_STRING: mongodb://127.0.0.1:27017/serverless
+plugins:
+  - serverless-offline
+custom:
+  serverless-offline:
+    httpPort: 3000
+functions:
+
+  listUsers:
+    handler: src/controller/User.listUsers
+    events:
+      - http:
+          path: users
+          method: get
+          cors: true
+
+  createUser:
+    handler: src/controller/User.createUser
+    events:
+      - http:
+          path: users
+          method: post
+          cors: true
+
+  getUser:
+    handler: src/controller/User.getUser
+    events:
+      - http:
+          path: users/{id}
+          method: get
+          cors: true
+
+  updateUser:
+    handler: src/controller/User.updateUser
+    events:
+      - http:
+          path: users/{id}
+          method: put
+          cors: true
+
+  deleteUser:
+    handler: src/controller/User.deleteUser
+    events:
+      - http:
+          path: users/{id}
+          method: delete
+          cors: true
