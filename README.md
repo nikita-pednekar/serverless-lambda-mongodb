@@ -11,6 +11,10 @@
 
 - https://www.getpostman.com/collections/bebe20272059133d8e05
 
+## Project specs doc
+
+- Checkout the pdf `PracticalTest_Scratch Card.pdf` located in the base directory
+
 ### Api Endpoints
 
 | Path  | Method | Description |
