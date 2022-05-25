@@ -10,11 +10,13 @@ const model = mongoose.model('ScratchCard', {
         required: true,
     },
     isScratched: {
-        type: Boolean
+        type: Boolean,
+        default: false
     },
     status: {
         type: String,
         required: true,
+        default: 'active'
     },
     createdAt: {
         type: Date,

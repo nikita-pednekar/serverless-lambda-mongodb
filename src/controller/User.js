@@ -60,7 +60,7 @@ module.exports.createUser = async (event, context) => {
       email: data.email,
       firstName: data.firstName,
       lastName: data.lastName,
-      status: 'Active',
+      status: 'active',
       createdAt: new Date()
     });
 
@@ -112,6 +112,41 @@ module.exports.updateUser = async (event, context) => {
 
     await UserModel.findByIdAndUpdate(id, user);
     return buildResponse(200, user);
+
+  } catch (e) {
+    return buildResponse(500, { message: e.message })
+  }
+
+};
+
+module.exports.updateStatus = async (event, context) => {
+  try {
+
+    await connectToDatabase(mongoString)
+    
+    const data = JSON.parse(event.body);
+
+    let error; let message = '';
+    if (!data.users.length) { error = 1; message = 'Please select users'; }
+
+    if (!error && !data.status) { error = 1; message = 'Status is required'; }
+
+    if (error === 1) return buildResponse(400, { message: message })
+
+    var ops = [];
+    data.users.forEach(function(user) {
+        ops.push({
+            "updateOne": {
+                "filter": { "_id": user },
+                "update": {
+                    "$set": { "status": data.status }
+                }
+            }
+        });
+    })
+
+    const users = await UserModel.bulkWrite(ops);
+    return buildResponse(200, { message: 'Users updated.' });
 
   } catch (e) {
     return buildResponse(500, { message: e.message })

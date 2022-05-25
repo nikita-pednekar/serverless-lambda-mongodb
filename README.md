@@ -24,6 +24,8 @@
 | /dev/users | GET | Gets list of all users |
 | /dev/users/{id} | PUT | Updates a user |
 | /dev/users/{id} | DELETE | Deletes a user |
-
-
-
+| /dev/users/status | PATCH | Updates bulk users status |
+| /dev/scratch-cards/{numberOfScratchCards} | POST | Creates bulk scratch cards |
+| /dev/scratch-cards | GET | Gets all the unused scratch cards |
+| /dev/transactions | POST | Creates a transaction |
+| /dev/transactions | GET | Gets all the transactions with filters |

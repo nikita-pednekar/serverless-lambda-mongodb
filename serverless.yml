@@ -53,3 +53,43 @@ functions:
           path: users/{id}
           method: delete
           cors: true
+
+  updateStatus:
+    handler: src/controller/User.updateStatus
+    events:
+      - http:
+          path: users/status
+          method: patch
+          cors: true
+
+  createScratchCards:
+    handler: src/controller/ScratchCard.createScratchCards
+    events:
+      - http:
+          path: scratch-cards/{numberOfScratchCards}
+          method: post
+          cors: true
+
+  getUnusedScratchCards:
+    handler: src/controller/ScratchCard.getUnusedScratchCards
+    events:
+      - http:
+          path: scratch-cards
+          method: get
+          cors: true
+
+  createTransactions:
+    handler: src/controller/Transaction.createTransactions
+    events:
+      - http:
+          path: transactions
+          method: post
+          cors: true
+
+  getAllTransactions:
+    handler: src/controller/Transaction.getAllTransactions
+    events:
+      - http:
+          path: transactions
+          method: get
+          cors: true
