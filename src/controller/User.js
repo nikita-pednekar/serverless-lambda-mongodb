@@ -1,27 +1,8 @@
-const mongoose = require('mongoose');
-const Promise = require('bluebird');
-const UserModel = require('../model/User.js');
-
-mongoose.Promise = Promise;
+const  connectToDatabase  = require('../config/db.js');
+const  { UserModel }  = require('../model/index.js');
+const  buildResponse  = require('../util/response.js');
 
 const mongoString = process.env.MONGODB_STRING;
-
-let cachedDB = null
-
-async function connectToDatabase (uri, options = {}) {
-  if (!cachedDB) cachedDB = await mongoose.connect(uri, { useMongoClient: true })
-}
-
-function buildResponse (statusCode, data) {
-  return {
-    statusCode: statusCode,
-    headers: {
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Credentials': true
-    },
-    body: JSON.stringify(data)
-  }
-}
 
 module.exports.getUser = async (event, context) => {
   try {
@@ -39,10 +20,19 @@ module.exports.getUser = async (event, context) => {
 module.exports.listUsers = async (event, context) => {
   try {
 
-    await connectToDatabase(mongoString)
+    await connectToDatabase(mongoString);
+    console.log(event.queryStringParameters);
+    const { limit, page } = event.queryStringParameters;
 
-    const users = await UserModel.find();
-    return buildResponse(200, users);
+    let offset = page * limit;
+
+    const users = await UserModel.find().skip(offset).limit(Number(limit));
+    const count = await UserModel.find().count();
+    
+    return buildResponse(200, { 
+      rows: users,
+      count
+    });
 
   } catch (e) {
     return buildResponse(500, { message: e.message })

@@ -1,28 +1,9 @@
-const mongoose = require('mongoose');
-const Promise = require('bluebird');
-const ScratchCardModel = require('../model/ScratchCard.js');
+const  connectToDatabase  = require('../config/db.js');
+const  { ScratchCardModel }  = require('../model/index.js');
 const moment = require('moment');
-
-mongoose.Promise = Promise;
+const  buildResponse  = require('../util/response.js');
 
 const mongoString = process.env.MONGODB_STRING;
-
-let cachedDB = null
-
-async function connectToDatabase (uri, options = {}) {
-  if (!cachedDB) cachedDB = await mongoose.connect(uri, { useMongoClient: true })
-}
-
-function buildResponse (statusCode, data) {
-  return {
-    statusCode: statusCode,
-    headers: {
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Credentials': true
-    },
-    body: JSON.stringify(data)
-  }
-}
 
 module.exports.createScratchCards = async (event, context) => {
   try {
